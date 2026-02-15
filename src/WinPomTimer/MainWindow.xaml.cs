@@ -1,5 +1,4 @@
 using System.Globalization;
-using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -114,12 +113,16 @@ public partial class MainWindow : Window
 
     private static System.Drawing.Icon LoadNotifyIcon()
     {
-        var iconPath = Path.Combine(AppContext.BaseDirectory, "WinPomTimer.ico");
         try
         {
-            if (File.Exists(iconPath))
+            var exePath = Environment.ProcessPath;
+            if (!string.IsNullOrWhiteSpace(exePath))
             {
-                return new System.Drawing.Icon(iconPath);
+                var extracted = System.Drawing.Icon.ExtractAssociatedIcon(exePath);
+                if (extracted is not null)
+                {
+                    return (System.Drawing.Icon)extracted.Clone();
+                }
             }
         }
         catch
@@ -718,7 +721,6 @@ public partial class MainWindow : Window
     {
         if (_allowExit)
         {
-            _notifyIcon.Icon?.Dispose();
             _notifyIcon.Visible = false;
             _notifyIcon.Dispose();
             _timerService.Dispose();

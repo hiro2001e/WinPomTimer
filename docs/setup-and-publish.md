@@ -55,19 +55,30 @@ dotnet publish .\src\WinPomTimer\WinPomTimer.csproj `
 - `PresentationNative_cor3.dll`
 - `vcruntime140_cor3.dll`
 - `wpfgfx_cor3.dll`
-- `秒針.wav`
-- `鳩時計1.wav`
 
 注記:
 
 - `WinPomTimer.pdb` はデバッグ用のため、通常配布には不要。
+- `秒針.wav` / `鳩時計1.wav` はカスタム既定音を使う場合のみ必要。無くても動作はする（代替音にフォールバック）。
+- `README_使い方.txt` は実行に必須ではないが、配布時は同梱を推奨。
 
 ## 6. ZIP Packaging Example
 
 ```powershell
+$publish = ".\src\WinPomTimer\bin\Release\net8.0-windows\win-x64\publish"
+$zip = ".\downloads\WinPomTimer-win-x64.zip"
+
 Compress-Archive `
-  -Path .\src\WinPomTimer\bin\Release\net8.0-windows\win-x64\publish\* `
-  -DestinationPath .\downloads\WinPomTimer-win-x64.zip `
+  -Path @(
+    "$publish\WinPomTimer.exe",
+    "$publish\D3DCompiler_47_cor3.dll",
+    "$publish\PenImc_cor3.dll",
+    "$publish\PresentationNative_cor3.dll",
+    "$publish\vcruntime140_cor3.dll",
+    "$publish\wpfgfx_cor3.dll",
+    "$publish\README_使い方.txt"
+  ) `
+  -DestinationPath $zip `
   -Force
 ```
 
