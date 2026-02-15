@@ -5,6 +5,7 @@ namespace WinPomTimer.Domain;
 public sealed class PomodoroSettings
 {
     public const string DefaultTickSoundFileName = "\u79D2\u91DD.wav";
+    public const string DefaultWorkEndSoundFileName = "\u9CE9\u6642\u8A081.wav";
     public static string PreferredTickSoundPath => Path.Combine(AppContext.BaseDirectory, DefaultTickSoundFileName);
 
     public int WorkMinutes { get; set; } = 25;
@@ -24,6 +25,7 @@ public sealed class PomodoroSettings
     public bool EnableSystemNotifications { get; set; } = true;
 
     public string? SessionSwitchSoundPath { get; set; }
+    public string? WorkEndSoundPath { get; set; }
     public string? WorkStartSoundPath { get; set; }
     public string? PreBreakAlertSoundPath { get; set; }
     public string? TickSoundPath { get; set; }

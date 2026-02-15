@@ -75,7 +75,12 @@
               <Button DockPanel.Dock="Right" Width="70" Margin="6,0,0,0" Content="参照" Click="BrowseTickSound_Click" />
               <TextBox x:Name="TickSoundPathBox" Margin="0" />
             </DockPanel>
-            <Button Width="180" Content="デフォルト秒針音を設定" Click="GenerateTickSound_Click" />
+
+            <TextBlock Margin="0,8,0,0" Text="作業終了音ファイル (.wav)" />
+            <DockPanel Margin="0,4,0,8">
+              <Button DockPanel.Dock="Right" Width="70" Margin="6,0,0,0" Content="参照" Click="BrowseWorkEndSound_Click" />
+              <TextBox x:Name="WorkEndSoundPathBox" Margin="0" />
+            </DockPanel>
           </StackPanel>
         </ScrollViewer>
       </TabItem>

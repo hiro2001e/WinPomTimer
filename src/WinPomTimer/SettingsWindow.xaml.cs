@@ -1,5 +1,4 @@
 using System.Globalization;
-using System.IO;
 using System.Windows;
 using System.Windows.Media;
 using WinPomTimer.Domain;
@@ -63,6 +62,7 @@ public partial class SettingsWindow : Window
         TickVolumeBox.Text = settings.TickVolumePercent.ToString(CultureInfo.InvariantCulture);
         TickModeCombo.SelectedIndex = settings.TickSoundMode == TickSoundMode.WorkOnly ? 0 : 1;
         TickSoundPathBox.Text = settings.TickSoundPath ?? string.Empty;
+        WorkEndSoundPathBox.Text = settings.WorkEndSoundPath ?? string.Empty;
 
         AlwaysOnTopCheck.IsChecked = settings.AlwaysOnTop;
         MouseLeaveOpacityCheck.IsChecked = settings.EnableMouseLeaveOpacity;
@@ -94,6 +94,7 @@ public partial class SettingsWindow : Window
         _working.TickVolumePercent = ParseInt(TickVolumeBox.Text, 30, 0, 100);
         _working.TickSoundMode = TickModeCombo.SelectedIndex == 0 ? TickSoundMode.WorkOnly : TickSoundMode.AllSessions;
         _working.TickSoundPath = NormalizePath(TickSoundPathBox.Text);
+        _working.WorkEndSoundPath = NormalizePath(WorkEndSoundPathBox.Text);
 
         _working.AlwaysOnTop = AlwaysOnTopCheck.IsChecked == true;
         _working.EnableMouseLeaveOpacity = MouseLeaveOpacityCheck.IsChecked == true;
@@ -149,27 +150,16 @@ public partial class SettingsWindow : Window
         }
     }
 
-    private void GenerateTickSound_Click(object sender, RoutedEventArgs e)
+    private void BrowseWorkEndSound_Click(object sender, RoutedEventArgs e)
     {
-        var preferred = PomodoroSettings.PreferredTickSoundPath;
-        if (File.Exists(preferred))
+        var dialog = new Microsoft.Win32.OpenFileDialog
         {
-            TickSoundPathBox.Text = preferred;
-            System.Windows.MessageBox.Show(this, "新しいデフォルト秒針音を設定しました。", "設定", MessageBoxButton.OK, MessageBoxImage.Information);
-            return;
-        }
-
-        var appLocal = Path.Combine(AppContext.BaseDirectory, "秒針.wav");
-        if (File.Exists(appLocal))
+            Filter = "WAV files (*.wav)|*.wav|All files (*.*)|*.*"
+        };
+        if (dialog.ShowDialog(this) == true)
         {
-            TickSoundPathBox.Text = appLocal;
-            System.Windows.MessageBox.Show(this, "同梱の秒針音をデフォルトに設定しました。", "設定", MessageBoxButton.OK, MessageBoxImage.Information);
-            return;
+            WorkEndSoundPathBox.Text = dialog.FileName;
         }
-
-        var generated = TickSoundGenerator.EnsureDefaultTickWav();
-        TickSoundPathBox.Text = generated;
-        System.Windows.MessageBox.Show(this, "秒針音ファイルが見つからないため、生成音を設定しました。", "設定", MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
     private void PickShellColor_Click(object sender, RoutedEventArgs e)

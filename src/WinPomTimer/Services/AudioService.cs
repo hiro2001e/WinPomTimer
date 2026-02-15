@@ -6,16 +6,13 @@ namespace WinPomTimer.Services;
 
 public sealed class AudioService
 {
-    private const string DefaultWorkEndSoundFileName = "\u9CE9\u6642\u8A081.wav";
     private const long MaxWaveFileBytes = 10L * 1024L * 1024L;
 
     private PomodoroSettings _settings;
-    private readonly string _generatedTickPath;
 
     public AudioService(PomodoroSettings settings)
     {
         _settings = settings;
-        _generatedTickPath = TickSoundGenerator.EnsureDefaultTickWav();
     }
 
     public void UpdateSettings(PomodoroSettings settings)
@@ -77,24 +74,18 @@ public sealed class AudioService
         {
             return preferred;
         }
-
-        var appLocalTickPath = Path.Combine(AppContext.BaseDirectory, PomodoroSettings.DefaultTickSoundFileName);
-        if (TryGetUsableWavePath(appLocalTickPath, out var appLocal))
-        {
-            return appLocal;
-        }
-
-        return _generatedTickPath;
+        
+        return string.Empty;
     }
 
     private string? ResolveWorkEndSoundPath()
     {
-        if (TryGetUsableWavePath(_settings.SessionSwitchSoundPath, out var configured))
+        if (TryGetUsableWavePath(_settings.WorkEndSoundPath, out var configured))
         {
             return configured;
         }
 
-        var appLocalSoundPath = Path.Combine(AppContext.BaseDirectory, DefaultWorkEndSoundFileName);
+        var appLocalSoundPath = Path.Combine(AppContext.BaseDirectory, PomodoroSettings.DefaultWorkEndSoundFileName);
         if (TryGetUsableWavePath(appLocalSoundPath, out var appLocal))
         {
             return appLocal;
