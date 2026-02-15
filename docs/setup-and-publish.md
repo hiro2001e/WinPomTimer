@@ -67,11 +67,16 @@ dotnet publish .\src\WinPomTimer\WinPomTimer.csproj `
 ```powershell
 Compress-Archive `
   -Path .\src\WinPomTimer\bin\Release\net8.0-windows\win-x64\publish\* `
-  -DestinationPath .\WinPomTimer-win-x64.zip `
+  -DestinationPath .\downloads\WinPomTimer-win-x64.zip `
   -Force
 ```
 
-## 7. End-User Manual
+## 7. Release Upload
+
+- GitHub Releases の Assets に `downloads/WinPomTimer-win-x64.zip` をアップロードする
+- README のダウンロード導線は Releases を案内先にする
+
+## 8. End-User Manual
 
 配布物に以下を同梱することを推奨。
 

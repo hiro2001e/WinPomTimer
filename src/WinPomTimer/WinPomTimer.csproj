@@ -8,16 +8,16 @@
     <UseWindowsForms>true</UseWindowsForms>
     <AssemblyName>WinPomTimer</AssemblyName>
     <RootNamespace>WinPomTimer</RootNamespace>
-    <ApplicationIcon>..\..\WinPomTimer.ico</ApplicationIcon>
+    <ApplicationIcon>..\..\assets\icon\WinPomTimer.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="..\..\秒針.wav">
+    <Content Include="..\..\assets\sounds\秒針.wav">
       <Link>秒針.wav</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-    <Content Include="..\..\鳩時計1.wav">
+    <Content Include="..\..\assets\sounds\鳩時計1.wav">
       <Link>鳩時計1.wav</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
@@ -27,7 +27,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-    <Content Include="..\..\WinPomTimer.ico">
+    <Content Include="..\..\assets\icon\WinPomTimer.ico">
       <Link>WinPomTimer.ico</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
