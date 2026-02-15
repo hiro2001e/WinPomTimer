@@ -1,0 +1,266 @@
+<Window x:Class="WinPomTimer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="ポモドーロタイマー"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        SizeToContent="Manual"
+        Width="420"
+        Height="640"
+        MinWidth="260"
+        MinHeight="620"
+        FontFamily="Yu Gothic UI"
+        MouseLeftButtonDown="Window_MouseLeftButtonDown">
+  <Window.Resources>
+    <SolidColorBrush x:Key="ShellBrush" Color="#DD121826" />
+    <SolidColorBrush x:Key="ShellBorderBrush" Color="#335A79C4" />
+    <LinearGradientBrush x:Key="ClockBrush" StartPoint="0,0" EndPoint="1,1">
+      <GradientStop Color="#FF1D365F" Offset="0" />
+      <GradientStop Color="#FF2D5B9A" Offset="1" />
+    </LinearGradientBrush>
+    <Style x:Key="ActionButton" TargetType="Button">
+      <Setter Property="Margin" Value="4" />
+      <Setter Property="Padding" Value="12,8" />
+      <Setter Property="Foreground" Value="#F2F6FF" />
+      <Setter Property="Background" Value="#2B3F66" />
+      <Setter Property="BorderBrush" Value="#668DBD" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="Cursor" Value="Hand" />
+      <Setter Property="FontWeight" Value="SemiBold" />
+    </Style>
+    <Style x:Key="HeaderButton" TargetType="Button">
+      <Setter Property="Margin" Value="4,0,0,0" />
+      <Setter Property="Width" Value="58" />
+      <Setter Property="Height" Value="28" />
+      <Setter Property="Foreground" Value="#E7EEFF" />
+      <Setter Property="Background" Value="#223357" />
+      <Setter Property="BorderBrush" Value="#466696" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="Cursor" Value="Hand" />
+      <Setter Property="FontSize" Value="11" />
+      <Setter Property="FontWeight" Value="SemiBold" />
+    </Style>
+    <Style x:Key="TagPillButton" TargetType="ToggleButton">
+      <Setter Property="Margin" Value="0,0,8,6" />
+      <Setter Property="Padding" Value="10,3" />
+      <Setter Property="MinHeight" Value="28" />
+      <Setter Property="Cursor" Value="Hand" />
+      <Setter Property="Background" Value="#4B8BF4" />
+      <Setter Property="BorderBrush" Value="#7B9FD9" />
+      <Setter Property="Foreground" Value="#F6FAFF" />
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="ToggleButton">
+            <Grid>
+              <Rectangle x:Name="OffOutline"
+                         RadiusX="14"
+                         RadiusY="14"
+                         Fill="Transparent"
+                         Stroke="{TemplateBinding BorderBrush}"
+                         StrokeThickness="1.25"
+                         StrokeDashArray="3,2" />
+              <Border x:Name="OnFill"
+                      CornerRadius="14"
+                      BorderThickness="1.25"
+                      BorderBrush="{TemplateBinding BorderBrush}"
+                      Background="{TemplateBinding Background}"
+                      Opacity="0" />
+              <ContentPresenter HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Margin="{TemplateBinding Padding}"
+                                RecognizesAccessKey="True" />
+            </Grid>
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsChecked" Value="True">
+                <Setter TargetName="OffOutline" Property="Opacity" Value="0" />
+                <Setter TargetName="OnFill" Property="Opacity" Value="1" />
+              </Trigger>
+              <Trigger Property="IsChecked" Value="False">
+                <Setter TargetName="OffOutline" Property="Opacity" Value="1" />
+                <Setter TargetName="OnFill" Property="Opacity" Value="0" />
+              </Trigger>
+              <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Opacity" Value="0.45" />
+              </Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+  </Window.Resources>
+
+  <Border x:Name="ShellCard"
+          Margin="10"
+          Padding="16"
+          CornerRadius="24"
+          Background="{StaticResource ShellBrush}"
+          BorderBrush="{StaticResource ShellBorderBrush}"
+          BorderThickness="1">
+    <StackPanel x:Name="MainStack">
+      <DockPanel x:Name="HeaderPanel" Margin="0,0,0,8">
+        <TextBlock DockPanel.Dock="Left"
+                   VerticalAlignment="Center"
+                   Foreground="#EAF0FF"
+                   FontSize="14"
+                   FontWeight="Bold"
+                   Text="ポモドーロタイマー" />
+        <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+          <Button Style="{StaticResource HeaderButton}" Content="設定" Click="OpenSettings_Click" />
+          <Button Style="{StaticResource HeaderButton}" Content="隠す" Click="CloseToTray_Click" />
+        </StackPanel>
+      </DockPanel>
+
+      <Grid x:Name="ClockHost"
+            Width="172"
+            Height="172"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center">
+        <Ellipse x:Name="MeterTrack"
+                 Width="164"
+                 Height="164"
+                 Stroke="#557090BA"
+                 StrokeThickness="2"
+                 HorizontalAlignment="Center"
+                 VerticalAlignment="Center" />
+        <Path x:Name="MeterProgressPath"
+              Stroke="#FFEA8A4E"
+              StrokeThickness="2"
+              StrokeStartLineCap="Round"
+              StrokeEndLineCap="Round"
+              HorizontalAlignment="Stretch"
+              VerticalAlignment="Stretch" />
+
+        <Border x:Name="ClockCard"
+                Width="164"
+                Height="164"
+                CornerRadius="82"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Background="{StaticResource ClockBrush}"
+                BorderThickness="0">
+          <Grid>
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+              <TextBlock x:Name="ModeText"
+                         Width="146"
+                         HorizontalAlignment="Center"
+                         TextAlignment="Center"
+                         Foreground="#D8E9FF"
+                         FontSize="14"
+                         FontWeight="SemiBold"
+                         Text="IDLE" />
+              <TextBlock x:Name="RemainingText"
+                         Width="146"
+                         Margin="0,6,0,0"
+                         HorizontalAlignment="Center"
+                         TextAlignment="Center"
+                         Foreground="#FFFFFF"
+                         FontSize="46"
+                         FontWeight="Bold"
+                         Typography.NumeralAlignment="Tabular"
+                         Typography.NumeralStyle="Lining"
+                         Text="00:00" />
+            </StackPanel>
+          </Grid>
+        </Border>
+      </Grid>
+
+      <TextBlock x:Name="StateHintText"
+                 Margin="0,10,0,6"
+                 HorizontalAlignment="Center"
+                 Foreground="#AFC2E8"
+                 FontSize="12"
+                 Text="1ボタンで 開始 / 一時停止 / 再開 を切り替え" />
+
+      <WrapPanel x:Name="ControlsPanel" HorizontalAlignment="Center" Margin="0,4,0,8">
+        <Button x:Name="PrimaryActionButton"
+                Width="150"
+                Style="{StaticResource ActionButton}"
+                Background="#375F9A"
+                BorderBrush="#81B5FF"
+                Content="開始"
+                Click="PrimaryAction_Click" />
+        <Button x:Name="SkipButton"
+                Width="90"
+                Style="{StaticResource ActionButton}"
+                Content="次へ"
+                Click="Skip_Click" />
+        <Button x:Name="ResetButton"
+                Width="90"
+                Style="{StaticResource ActionButton}"
+                Content="リセット"
+                Click="Reset_Click" />
+      </WrapPanel>
+
+      <Border x:Name="TagPanel"
+              Margin="0,0,0,8"
+              Padding="12"
+              CornerRadius="12"
+              Background="#141E31"
+              BorderBrush="#2C3E63"
+              BorderThickness="1">
+        <StackPanel>
+          <TextBlock Foreground="#E4EDFF" FontWeight="SemiBold" Text="タグ（Work中と終了後に選択可）" />
+          <WrapPanel x:Name="TagWrapPanel" Margin="0,8,0,0" />
+          <TextBlock x:Name="NoTagText"
+                     Margin="0,6,0,0"
+                     Foreground="#AFC2E8"
+                     Text="タグが未設定です。設定画面の「タグ」タブから追加してください。"
+                     Visibility="Collapsed" />
+        </StackPanel>
+      </Border>
+
+      <Border x:Name="NotePanel"
+              Margin="0,0,0,8"
+              Padding="12"
+              CornerRadius="12"
+              Background="#141E31"
+              BorderBrush="#2C3E63"
+              BorderThickness="1">
+        <StackPanel>
+          <TextBlock Foreground="#E4EDFF" FontWeight="SemiBold" Text="セッションメモ（Work中/終了後に入力）" />
+          <TextBox x:Name="NoteTextBox"
+                   Margin="0,8,0,0"
+                   Height="58"
+                   Padding="8,6"
+                   Background="#0F1728"
+                   Foreground="#F6FAFF"
+                   BorderBrush="#47608E"
+                   BorderThickness="1"
+                   TextWrapping="Wrap"
+                   AcceptsReturn="True"
+                   IsEnabled="False" />
+        </StackPanel>
+      </Border>
+
+      <Border x:Name="ProgressPanel"
+              Margin="0,2,0,8"
+              Padding="12"
+              CornerRadius="12"
+              Background="#141E31"
+              BorderBrush="#2C3E63"
+              BorderThickness="1">
+        <DockPanel>
+          <Button x:Name="OpenStatsButton"
+                  DockPanel.Dock="Right"
+                  Width="26"
+                  Height="22"
+                  Margin="8,0,0,0"
+                  Padding="0"
+                  FontFamily="Segoe UI Symbol"
+                  FontSize="12"
+                  Content="▤"
+                  ToolTip="統計ダッシュボードを開く"
+                  Click="OpenStats_Click" />
+          <TextBlock x:Name="ProgressText"
+                     Foreground="#D6E2FF"
+                     FontWeight="SemiBold"
+                     TextWrapping="Wrap"
+                     Text="今日: 00:00 | 今月: 00:00 | 完了サイクル: 0" />
+        </DockPanel>
+      </Border>
+    </StackPanel>
+  </Border>
+</Window>

@@ -1,0 +1,32 @@
+# Build outputs
+**/bin/
+**/obj/
+**/publish/
+
+# Visual Studio / .NET
+.vs/
+*.user
+*.rsuser
+*.suo
+*.userosscache
+*.sln.docstates
+
+# IDEs
+.idea/
+.vscode/
+
+# NuGet and packages
+packages/
+*.nupkg
+
+# Logs and temp files
+*.log
+*.tmp
+*.cache
+
+# OS files
+Thumbs.db
+Desktop.ini
+
+# Local archives
+*.zip
